@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.giaothuy.ebookone.R;
 import com.giaothuy.ebookone.callback.ToolgeListener;
 import com.giaothuy.ebookone.config.Constant;
+import com.giaothuy.ebookone.database.DatabaseHandler;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
@@ -47,12 +49,15 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
 
     private ToolgeListener listener;
 
+    private DatabaseHandler databaseHandler;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_read_file, container, false);
 
+        databaseHandler = new DatabaseHandler(getActivity());
         unbinder = ButterKnife.bind(this, view);
 
         pdfView.fromAsset(Constant.FILE_NAME)
@@ -77,6 +82,7 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
         return view;
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -92,6 +98,11 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constant.SEND_BROADCAST));
+
+        Log.e("1111", databaseHandler.getPageCount() + "");
+        if (databaseHandler.getPageCount() > 0) {
+            pdfView.jumpTo(databaseHandler.getPage(0), true);
+        }
     }
 
     @Override
@@ -100,6 +111,18 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
         unbinder.unbind();
         if (broadcastReceiver != null) {
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        }
+
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (databaseHandler.getPageCount() > 0) {
+            databaseHandler.updatePage(pdfView.getCurrentPage()+"");
+        } else {
+            databaseHandler.addPage(pdfView.getCurrentPage()+"");
         }
     }
 
@@ -121,8 +144,9 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            pdfView.jumpTo(intent.getIntExtra(Constant.PAGE, 0)-1, true);
+            pdfView.jumpTo(intent.getIntExtra(Constant.PAGE, 0) - 1, true);
             title.setText(intent.getStringExtra(Constant.TITLE));
         }
     };
+
 }

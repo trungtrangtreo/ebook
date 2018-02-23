@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by 1 on 2/23/2018.
@@ -26,6 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Contacts Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_PAGE = "number_page";
+    private static final String KEY_TITLE = "title";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,7 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_PAGE + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PAGE + " TEXT)";
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PAGE + " TEXT,"+KEY_TITLE+" TEXT)";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -72,7 +74,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_PAGE, page);
         // updating row
         return db.update(TABLE_PAGE, values, KEY_ID + " = ?",
-                new String[]{"0"});
+                new String[]{"1"});
     }
 
     public int getPage(int id) {
@@ -85,6 +87,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         int page = Integer.parseInt(cursor.getString(1));
+        Log.e("1111", cursor.getString(1));
+
         // return contact
         return page;
     }

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.giaothuy.ebookone.R;
 import com.giaothuy.ebookone.callback.ToolgeListener;
@@ -23,6 +24,7 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
+import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
 
@@ -51,6 +53,8 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
 
     private DatabaseHandler databaseHandler;
 
+    private int pageView=0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,14 +64,27 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
         databaseHandler = new DatabaseHandler(getActivity());
         unbinder = ButterKnife.bind(this, view);
 
+
+        if(databaseHandler.getPageCount()>0)
+        {
+            pageView=databaseHandler.getPage(1);
+        }
+
         pdfView.fromAsset(Constant.FILE_NAME)
-                .defaultPage(0)
+                .defaultPage(pageView)
                 .onPageChange(this)
                 .enableAnnotationRendering(true)
+                .enableSwipe(true)
                 .onLoad(this)
                 .scrollHandle(new DefaultScrollHandle(getActivity()))
                 .spacing(10) // in dp
                 .onPageError(this)
+                .onPageScroll(new OnPageScrollListener() {
+                    @Override
+                    public void onPageScrolled(int page, float positionOffset) {
+
+                    }
+                })
                 .pageFitPolicy(FitPolicy.BOTH)
                 .load();
 
@@ -98,11 +115,6 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constant.SEND_BROADCAST));
-
-        Log.e("1111", databaseHandler.getPageCount() + "");
-        if (databaseHandler.getPageCount() > 0) {
-            pdfView.jumpTo(databaseHandler.getPage(0), true);
-        }
     }
 
     @Override
@@ -119,10 +131,12 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        int page=pdfView.getCurrentPage();
         if (databaseHandler.getPageCount() > 0) {
-            databaseHandler.updatePage(pdfView.getCurrentPage()+"");
+            databaseHandler.updatePage(page+"");
         } else {
-            databaseHandler.addPage(pdfView.getCurrentPage()+"");
+            databaseHandler.addPage(page+"");
         }
     }
 

@@ -1,3 +1,40 @@
 <resources>
     <string name="app_name">EbookOne</string>
+
+    <string name="header_one">PHẦN I: DÁM NÓI CHUYỆN - NẮM VỮNG KĨ NĂNG GIAO TIẾP</string>
+    <string name="header_two">PHẦN II: KĨ NĂNG GIAO TIẾP VỚI MỖI HOÀN CẢNH VÀ ĐỐI TƯỢNG KHÁC NHAU</string>
+    <string name="header_three">PHẦN III: NÓI NĂNG KHÉO LÉO TRONG NHỮNG TÌNH HUỐNG KHÓ XỬ</string>
+    <string name="head">Lời ngỏ</string>
+    <string name="preface">Lời nói đầu</string>
+    <!--Chapter 1-->
+    <string-array name="chapter_one">
+        <item>Chương 1: Dũng cảm mở lời, dám nói mới biết cách nói</item>
+        <item>Chương 2: Đọc nhiều – đi nhiều, tích lũy kiến thức giao tiếp</item>
+        <item>Chương 3: "Bắt bệnh" để làm chủ cuộc giao tiếp</item>
+        <item>Chương 4: Nắm vững chừng mực trong giao tiếp</item>
+        <item>Chương 5: Khen nhiều chê ít, tránh để lời nói làm hại đến thân</item>
+        <item>Chương 6: Thêm gia vị hài hước cho giao tiếp</item>
+    </string-array>
+
+    <!--Chapter 2-->
+    <string-array name="chapter_two">
+        <item>Chương 7: Kĩ năng giao tiếp với mỗi hoàn cảnh và đối tượng khác nhau</item>
+        <item>Chương 8: Cách giao tiếp với lãnh đạo để giành cơ hội phát triển nghề nghiệp</item>
+        <item>Chương 9: Chốn công sở nhiều thị phi, biết cách ăn nói rất quan trọng</item>
+        <item>Chương 10: Khéo ăn nói trong nghệ thuật bán hàng</item>
+        <item>Chương 11: Rèn luyện tài đàm phán, luôn nắm chắc phần thắng</item>
+        <item>Chương 12: Kĩ năng diễn thuyết sinh động</item>
+        <item>Chương 13: Nắm chắc kĩ năng ngôn ngữ giúp bạn hòa nhập buổi tiệc</item>
+        <item>Chương 14: Những lời nói ngọt ngào trong tình yêu</item>
+    </string-array>
+
+    <!--Chapter 1-->
+    <string-array name="chapter_three">
+        <item>Chương 15: Từ chối khéo léo để không làm mất lòng người khác</item>
+        <item>Chương 16: Khéo ăn nói khi nhờ người khác giúp đỡ</item>
+        <item>Chương 17: Nghệ thuật thuyết phục</item>
+        <item>Chương 18: Con người khó tránh việc mắc lỗi, cần thành khẩn khi xin lỗi</item>
+        <item>Chương 19: Lời nói thật dễ nghe, khéo léo trong phê bình</item>
+        <item>Chương 20: Nghệ thuật an ủi làm ấm lòng người khác</item>
+    </string-array>
 </resources>

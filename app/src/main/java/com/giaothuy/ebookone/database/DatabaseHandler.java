@@ -36,7 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_PAGE + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PAGE + " TEXT,"+KEY_TITLE+" TEXT)";
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PAGE + " TEXT," + KEY_TITLE + " TEXT)";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -47,11 +47,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addPage(String page) {
+    public void addPage(String page, String title) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_PAGE, page); // Contact Name
+        values.put(KEY_TITLE, title); // Contact Name
         // Inserting Row
         db.insert(TABLE_PAGE, null, values);
         db.close(); // Closing database connection
@@ -67,11 +68,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return count;
     }
 
-    public int updatePage(String page) {
+    public int updatePage(String page, String title) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_PAGE, page);
+        values.put(KEY_TITLE, title);
         // updating row
         return db.update(TABLE_PAGE, values, KEY_ID + " = ?",
                 new String[]{"1"});
@@ -91,6 +93,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // return contact
         return page;
+    }
+
+    public String getTitle(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_PAGE, new String[]{KEY_ID,
+                        KEY_PAGE,KEY_TITLE}, KEY_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        String title = cursor.getString(2);
+        // return contact
+        return title;
     }
 
 }

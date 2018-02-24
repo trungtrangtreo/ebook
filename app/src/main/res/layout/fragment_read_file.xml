@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/_10sdp"
-
             android:src="@drawable/ic_menu" />
 
         <TextView
@@ -31,6 +30,14 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_13sdp" />
 
+        <ImageView
+            android:id="@+id/ivAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:src="@drawable/ic_access_alarms" />
     </RelativeLayout>
 
     <com.github.barteksc.pdfviewer.PDFView

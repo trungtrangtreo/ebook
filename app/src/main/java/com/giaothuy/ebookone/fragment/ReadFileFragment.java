@@ -1,21 +1,27 @@
 package com.giaothuy.ebookone.fragment;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.giaothuy.ebookone.R;
+import com.giaothuy.ebookone.activity.MainActivity;
 import com.giaothuy.ebookone.callback.ToolgeListener;
 import com.giaothuy.ebookone.config.Constant;
 import com.giaothuy.ebookone.database.DatabaseHandler;
@@ -46,15 +52,17 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
     @BindView(R.id.title)
     TextView title;
 
+    @BindView(R.id.ivAlarm)
+    ImageView ivAlarm;
+
     private Unbinder unbinder;
-
     private ToolgeListener listener;
-
     private DatabaseHandler databaseHandler;
-
     private int pageView = 0;
-
     private boolean isScroll = true;
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,6 +110,19 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
             @Override
             public void onClick(View v) {
                 listener.closeDrawer();
+            }
+        });
+
+        ivAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "aaa", Toast.LENGTH_SHORT).show();
+                alarmManager= (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, 0);
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() +
+                                5000, pendingIntent);
             }
         });
 

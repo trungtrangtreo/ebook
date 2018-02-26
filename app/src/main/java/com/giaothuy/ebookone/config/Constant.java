@@ -14,6 +14,9 @@ public class Constant {
 
     public static final String TITLE = "title";
 
+    public static final String APP_ID_AM = "ca-app-pub-8953751559247702~7688473245";
+    public static final String CATE_AM = "ca-app-pub-8953751559247702/6884380230";
+
     public static class MOVE_PAGE {
         public static final int LOI_NGO = 5;
         public static final int LOI_MO_DAU = 8;

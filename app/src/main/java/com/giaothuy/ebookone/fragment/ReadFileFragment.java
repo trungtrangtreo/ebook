@@ -35,8 +35,6 @@ import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
 
-import java.util.Calendar;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -115,7 +113,9 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
         ivDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 listener.closeDrawer();
+                listener.showAd();
             }
         });
 
@@ -134,9 +134,9 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
                                 showSeebar();
                                 break;
                             case R.id.contact:
+                                pdfView.setMidZoom(5);
                                 break;
                         }
-
                         return true;
                     }
                 });
@@ -224,43 +224,43 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
             title.setText("Lời ngỏ");
         } else if (page == 8) {
             title.setText("Lời nói đầu");
-        } else if (page == 9) {
+        } else if (page == 9 || page == 26) {
             title.setText("Chương 1: Dũng cảm mở lời, dám nói mới biết cách nói");
-        } else if (page == 27) {
+        } else if (page == 27 || page == 35) {
             title.setText("Chương 2: Đọc nhiều – đi nhiều, tích lũy kiến thức giao tiếp");
-        } else if (page == 36) {
+        } else if (page == 36 || page == 55) {
             title.setText("Chương 3: Bắt bệnh để làm chủ cuộc giao tiếp");
-        } else if (page == 56) {
+        } else if (page == 56 || page == 72) {
             title.setText("Chương 4: Nắm vững chừng mực trong giao tiếp");
-        } else if (page == 73) {
+        } else if (page == 73 || page == 79) {
             title.setText("LChương 5: Khen nhiều chê ít, tránh để lời nói làm hại đến thân");
-        } else if (page == 80) {
+        } else if (page == 80 || page == 97) {
             title.setText("Chương 6: Thêm gia vị hài hước cho giao tiếp");
-        } else if (page == 98) {
+        } else if (page == 98 || page == 116) {
             title.setText("Chương 7: Kĩ năng giao tiếp với mỗi hoàn cảnh và đối tượng khác nhau");
-        } else if (page == 117) {
+        } else if (page == 117 || page == 137) {
             title.setText("Chương 8: Cách giao tiếp với lãnh đạo để giành cơ hội phát triển nghề nghiệp");
-        } else if (page == 139) {
+        } else if (page == 139 || page == 156) {
             title.setText("Chương 9: Chốn công sở nhiều thị phi, biết cách ăn nói rất quan trọng");
-        } else if (page == 157) {
+        } else if (page == 157 || page == 184) {
             title.setText("Chương 10: Khéo ăn nói trong nghệ thuật bán hàng");
-        } else if (page == 185) {
+        } else if (page == 185 || page == 208) {
             title.setText("Chương 11: Rèn luyện tài đàm phán, luôn nắm chắc phần thắng");
-        } else if (page == 209) {
+        } else if (page == 209 || page == 226) {
             title.setText("Chương 12: Kĩ năng diễn thuyết sinh động");
-        } else if (page == 227) {
+        } else if (page == 227 || page == 237) {
             title.setText("Chương 13: Nắm chắc kĩ năng ngôn ngữ giúp bạn hòa nhập buổi tiệc");
-        } else if (page == 238) {
+        } else if (page == 238 || page == 251) {
             title.setText("Chương 14: Những lời nói ngọt ngào trong tình yêu");
-        } else if (page == 252) {
+        } else if (page == 252 || page == 267) {
             title.setText("Chương 15: Từ chối khéo léo để không làm mất lòng người khác");
-        } else if (page == 268) {
+        } else if (page == 268 || page == 281) {
             title.setText("Chương 16: Khéo ăn nói khi nhờ người khác giúp đỡ");
-        } else if (page == 282) {
+        } else if (page == 282 | page == 293) {
             title.setText("Chương 17: Nghệ thuật thuyết phục");
-        } else if (page == 294) {
+        } else if (page == 294 || page == 303) {
             title.setText("Chương 18: Con người khó tránh việc mắc lỗi, cần thành khẩn khi xin lỗi");
-        } else if (page == 304) {
+        } else if (page == 304 || page == 313) {
             title.setText("Chương 19: Lời nói thật dễ nghe, khéo léo trong phê bình");
         } else if (page == 314) {
             title.setText("Chương 20: Nghệ thuật an ủi làm ấm lòng người khác");
@@ -282,7 +282,6 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 tvCountSeebar.setText(String.valueOf(progress) + " phút");
                 if (progress > 0) {
-                    Calendar calendar = Calendar.getInstance();
                     Intent intent = new Intent(getActivity(), AlarmReceiver.class);
                     intent.putExtra(Constant.TITLE, title.getText().toString());
                     pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -301,6 +300,5 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
 
             }
         });
-
     }
 }

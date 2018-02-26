@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/_3sdp"
-            android:layout_toLeftOf="@+id/ivSetting"
+            android:layout_toLeftOf="@+id/ivAlarm"
             android:layout_toRightOf="@+id/ivDrawer"
             android:ellipsize="end"
             android:singleLine="true"

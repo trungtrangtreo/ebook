@@ -6,4 +6,6 @@ package com.giaothuy.ebookone.callback;
 
 public interface ToolgeListener {
     void closeDrawer();
+
+    void showAd();
 }

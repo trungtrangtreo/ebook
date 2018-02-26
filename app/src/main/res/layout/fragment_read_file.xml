@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/_3sdp"
+            android:layout_toLeftOf="@+id/ivSetting"
             android:layout_toRightOf="@+id/ivDrawer"
             android:ellipsize="end"
             android:singleLine="true"
@@ -31,14 +32,14 @@
             android:textSize="@dimen/_13sdp" />
 
         <ImageView
-            android:id="@+id/ivAlarm"
+            android:id="@+id/ivSetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/_10sdp"
-            android:src="@drawable/ic_access_alarms" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_setting" />
     </RelativeLayout>
 
     <com.github.barteksc.pdfviewer.PDFView

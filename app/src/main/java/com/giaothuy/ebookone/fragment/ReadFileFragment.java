@@ -12,19 +12,21 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.PopupMenu;
+import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.giaothuy.ebookone.R;
-import com.giaothuy.ebookone.activity.MainActivity;
 import com.giaothuy.ebookone.callback.ToolgeListener;
 import com.giaothuy.ebookone.config.Constant;
 import com.giaothuy.ebookone.database.DatabaseHandler;
+import com.giaothuy.ebookone.service.AlarmReceiver;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
@@ -32,6 +34,8 @@ import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,14 +50,14 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
     @BindView(R.id.pdfView)
     PDFView pdfView;
 
-    @BindView(R.id.rlTop)
-    RelativeLayout rlTop;
+    @BindView(R.id.ivDrawer)
+    ImageView ivDrawer;
 
     @BindView(R.id.title)
     TextView title;
 
-    @BindView(R.id.ivAlarm)
-    ImageView ivAlarm;
+    @BindView(R.id.ivSetting)
+    ImageView ivSetting;
 
     private Unbinder unbinder;
     private ToolgeListener listener;
@@ -71,6 +75,8 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
         View view = inflater.inflate(R.layout.fragment_read_file, container, false);
 
         databaseHandler = new DatabaseHandler(getActivity());
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
         unbinder = ButterKnife.bind(this, view);
 
 
@@ -106,23 +112,35 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
                 .load();
 
 
-        rlTop.setOnClickListener(new View.OnClickListener() {
+        ivDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.closeDrawer();
             }
         });
 
-        ivAlarm.setOnClickListener(new View.OnClickListener() {
+        ivSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "aaa", Toast.LENGTH_SHORT).show();
-                alarmManager= (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, 0);
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        SystemClock.elapsedRealtime() +
-                                5000, pendingIntent);
+                PopupMenu popup = new PopupMenu(getActivity(), ivSetting);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.poupup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.alarm:
+                                showSeebar();
+                                break;
+                            case R.id.contact:
+                                break;
+                        }
+
+                        return true;
+                    }
+                });
+                popup.show();
             }
         });
 
@@ -157,8 +175,6 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
         if (broadcastReceiver != null) {
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         }
-
-
     }
 
     @Override
@@ -249,5 +265,42 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
         } else if (page == 314) {
             title.setText("Chương 20: Nghệ thuật an ủi làm ấm lòng người khác");
         }
+    }
+
+    private void showSeebar() {
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View view = factory.inflate(R.layout.dialog_seebar, null);
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setView(view);
+        dialog.show();
+
+        SeekBar seekBar = view.findViewById(R.id.seekBar);
+        final TextView tvCountSeebar = view.findViewById(R.id.tvCountSeebar);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvCountSeebar.setText(String.valueOf(progress) + " phút");
+                if (progress > 0) {
+                    Calendar calendar = Calendar.getInstance();
+                    Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+                    intent.putExtra(Constant.TITLE, title.getText().toString());
+                    pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + progress * 60 * 1000, pendingIntent);
+                } else {
+                    alarmManager.cancel(pendingIntent);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 }

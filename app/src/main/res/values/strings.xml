@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EbookOne</string>
+    <string name="app_name">NV Pay</string>
 
     <string name="header_one">PHẦN I: DÁM NÓI CHUYỆN - NẮM VỮNG KĨ NĂNG GIAO TIẾP</string>
     <string name="header_two">PHẦN II: KĨ NĂNG GIAO TIẾP VỚI MỖI HOÀN CẢNH VÀ ĐỐI TƯỢNG KHÁC NHAU</string>
@@ -37,4 +37,7 @@
         <item>Chương 19: Lời nói thật dễ nghe, khéo léo trong phê bình</item>
         <item>Chương 20: Nghệ thuật an ủi làm ấm lòng người khác</item>
     </string-array>
+    <string name="alarm">Hẹn giờ đọc sách sau :</string>
+    <string name="mn_alarm">Hẹn giờ</string>
+    <string name="contact">Liên hệ, góp ý</string>
 </resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_10sdp">
+
+    <TextView
+        android:id="@+id/tvAlarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:text="@string/alarm"
+        android:textColor="@color/cl_header" />
+
+    <SeekBar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvAlarm"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_toLeftOf="@+id/tvCountSeebar"
+        android:padding="@dimen/_8sdp" />
+
+    <TextView
+        android:id="@+id/tvCountSeebar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/_11sdp"
+        android:textColor="@color/cl_header" />
+</RelativeLayout>

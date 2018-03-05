@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.giaothuy.ebookone.R;
 import com.giaothuy.ebookone.config.Constant;
+import com.giaothuy.ebookone.fragment.CommentFragment;
 import com.giaothuy.ebookone.fragment.ReadFileFragment;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -25,13 +26,20 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSlidingMenu().setMode(SlidingMenu.LEFT);
+        getSlidingMenu().setMode(SlidingMenu.LEFT_RIGHT);
         getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 
         setContentView(R.layout.content_frame);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_frame, new ReadFileFragment())
+                .commit();
+
+        getSlidingMenu().setSecondaryMenu(R.layout.menu_frame_two);
+        getSlidingMenu().setSecondaryShadowDrawable(R.drawable.shadowright);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.menu_frame_two, new CommentFragment())
                 .commit();
 
         MobileAds.initialize(this, Constant.APP_ID_AM);

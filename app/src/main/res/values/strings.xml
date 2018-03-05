@@ -40,4 +40,6 @@
     <string name="alarm">Hẹn giờ đọc sách sau :</string>
     <string name="mn_alarm">Hẹn giờ</string>
     <string name="contact">Liên hệ, góp ý</string>
+
+    <string name="loading">loading</string>
 </resources>

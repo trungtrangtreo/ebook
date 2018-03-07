@@ -36,5 +36,14 @@ dependencies {
     //goolge sign-in
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
+
+    // retrofit, gson
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+
+    implementation 'com.github.bumptech.glide:glide:4.6.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 }
 apply plugin: 'com.google.gms.google-services'

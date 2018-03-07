@@ -42,4 +42,7 @@
     <string name="contact">Liên hệ, góp ý</string>
 
     <string name="loading">loading</string>
+    <string name="tv_notify">Chưa có bình luận, nhận xét nào</string>
+    <string name="edt_comment">Viết bình luận, đánh giá</string>
+    <string name="btn_add_comment">Thêm bình luận</string>
 </resources>

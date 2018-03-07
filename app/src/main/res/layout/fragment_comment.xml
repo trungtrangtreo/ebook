@@ -8,7 +8,8 @@
         android:id="@+id/sign_in_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_5sdp">
+        android:padding="@dimen/_5sdp"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/btnGoogle"
@@ -23,11 +24,53 @@
             android:layout_below="@+id/btnGoogle" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rlComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="@dimen/_23sdp"
+            android:layout_height="@dimen/_23sdp"
+            android:src="@mipmap/ic_user"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edtComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_3sdp"
+            android:layout_toRightOf="@+id/ivAvatar"
+            android:hint="@string/edt_comment"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/btnAddComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edtComment"
+            android:text="@string/btn_add_comment" />
+    </RelativeLayout>
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/sign_in_top"
+        android:layout_below="@+id/rlComment"
         android:layout_marginTop="@dimen/_5sdp" />
+
+
+    <TextView
+        android:id="@+id/tvNotComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/tv_notify"
+        android:textSize="@dimen/_20sdp"
+        android:visibility="gone" />
 
 </RelativeLayout>

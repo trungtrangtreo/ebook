@@ -46,6 +46,7 @@ public class ChapterFragment extends Fragment {
 
     private ToolgeListener listener;
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

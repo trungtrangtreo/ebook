@@ -27,13 +27,11 @@ import com.giaothuy.ebookone.callback.ToolgeListener;
 import com.giaothuy.ebookone.config.Constant;
 import com.giaothuy.ebookone.database.DatabaseHandler;
 import com.giaothuy.ebookone.service.AlarmReceiver;
+import com.giaothuy.ebookone.service.DownloadTask;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
-import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
-import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
-import com.github.barteksc.pdfviewer.util.FitPolicy;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,7 +62,7 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
     private boolean isScroll = true;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
-
+    private String DOWNLOAD_SERVICE = "download_service";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,32 +80,8 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
             pageView = databaseHandler.getPage(1);
         }
 
-        pdfView.fromAsset(Constant.FILE_NAME)
-                .defaultPage(pageView)
-                .onPageChange(this)
-                .enableAnnotationRendering(true)
-                .enableSwipe(true)
-                .onLoad(this)
-                .enableDoubletap(false)
-                .scrollHandle(new DefaultScrollHandle(getActivity()))
-                .spacing(10) // in dp
-                .onPageError(this)
-                .onPageChange(new OnPageChangeListener() {
-                    @Override
-                    public void onPageChanged(int page, int pageCount) {
-                        if (isScroll) {
-                            setTitle(page + 1);
-                        }
-                    }
-                })
-                .onPageScroll(new OnPageScrollListener() {
-                    @Override
-                    public void onPageScrolled(int page, float positionOffset) {
 
-                    }
-                })
-                .pageFitPolicy(FitPolicy.BOTH)
-                .load();
+        new DownloadTask(getActivity(), Constant.BASE_FILE_DOWNLOAD, pdfView);
 
 
         ivDrawer.setOnClickListener(new View.OnClickListener() {
@@ -301,4 +275,5 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
             }
         });
     }
+
 }

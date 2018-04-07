@@ -5,26 +5,6 @@
     tools:context="com.giaothuy.ebookone.fragment.CommentFragment">
 
     <RelativeLayout
-        android:id="@+id/sign_in_top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/_5sdp"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/btnGoogle"
-            android:layout_width="@dimen/_200sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:background="@drawable/ic_google_singin" />
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btnGoogle" />
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/rlComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,6 +14,7 @@
             android:id="@+id/ivAvatar"
             android:layout_width="@dimen/_23sdp"
             android:layout_height="@dimen/_23sdp"
+            android:layout_centerVertical="true"
             android:src="@mipmap/ic_user"
             android:visibility="gone" />
 
@@ -41,19 +22,24 @@
             android:id="@+id/edtComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/_3sdp"
+            android:layout_toLeftOf="@+id/ivSend"
             android:layout_toRightOf="@+id/ivAvatar"
             android:hint="@string/edt_comment"
             android:inputType="text" />
 
-        <Button
-            android:id="@+id/btnAddComment"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/ivSend"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edtComment"
-            android:text="@string/btn_add_comment" />
-    </RelativeLayout>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/vt_send" />
 
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

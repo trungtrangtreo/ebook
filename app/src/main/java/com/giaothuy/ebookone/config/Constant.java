@@ -17,6 +17,9 @@ public class Constant {
     public static final String APP_ID_AM = "ca-app-pub-8953751559247702~7688473245";
     public static final String CATE_AM = "ca-app-pub-8953751559247702/6884380230";
 
+    public static final String BASE_FILE_DOWNLOAD = "https://firebasestorage.googleapis.com/v0/b/llldfxdfsx.appspot.com/o/kan.pdf?alt=media&token=8485f786-09e2-4799-82b8-de749a035ebc";
+    public static final String CHILD_FILE = "kan.pdf";
+
     public static class MOVE_PAGE {
         public static final int LOI_NGO = 5;
         public static final int LOI_MO_DAU = 8;

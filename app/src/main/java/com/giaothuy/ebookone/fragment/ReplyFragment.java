@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.giaothuy.ebookone.R;
 import com.giaothuy.ebookone.activity.BaseFragment;
+import com.giaothuy.ebookone.callback.EventBackPress;
 import com.giaothuy.ebookone.model.Comment;
 import com.giaothuy.ebookone.model.Post;
 import com.giaothuy.ebookone.model.User;
@@ -61,6 +62,8 @@ public class ReplyFragment extends BaseFragment {
     TextView tvComment;
     @BindView(R.id.field_comment_text)
     EditText edtComment;
+    @BindView(R.id.tvBack)
+    TextView tvBack;
     @BindView(R.id.button_post_comment)
     Button btnPostComment;
     @BindView(R.id.recycler_comments)
@@ -72,6 +75,8 @@ public class ReplyFragment extends BaseFragment {
     private DatabaseReference mCommentsReference;
     private ValueEventListener mPostListener;
     private CommentAdapter mAdapter;
+
+    private EventBackPress listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,7 +104,24 @@ public class ReplyFragment extends BaseFragment {
             }
         });
 
+        tvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onBackPressFragment();
+            }
+        });
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            listener = (EventBackPress) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(e.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
     }
 
     private void postComment() {
@@ -119,7 +141,7 @@ public class ReplyFragment extends BaseFragment {
 
                         // Create new comment object
                         String commentText = edtComment.getText().toString();
-                        Comment comment = new Comment(uid, authorName, commentText,user.avatar,System.currentTimeMillis());
+                        Comment comment = new Comment(uid, authorName, commentText, user.avatar, System.currentTimeMillis());
 
                         // Push the comment, it will appear in the list
                         mCommentsReference.push().setValue(comment);

@@ -3,6 +3,7 @@ package com.giaothuy.ebookone.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 
 import com.giaothuy.ebookone.R;
 import com.giaothuy.ebookone.callback.EventBackPress;
@@ -77,5 +78,25 @@ public class MainActivity extends BaseActivity implements ReplaceListener, Event
     @Override
     public void onBackPressFragment() {
         onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (slidingMenu.isMenuShowing()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (getSupportFragmentManager().getBackStackEntryCount() <= 2) {
+                System.exit(0);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

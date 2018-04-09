@@ -2,13 +2,18 @@
 package com.giaothuy.ebookone.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.giaothuy.ebookone.R;
+import com.giaothuy.ebookone.callback.EventBackPress;
+import com.giaothuy.ebookone.callback.ReplaceListener;
 import com.giaothuy.ebookone.fragment.CommentFragment;
+import com.giaothuy.ebookone.fragment.NewPostFragment;
 import com.giaothuy.ebookone.fragment.ReadFileFragment;
+import com.giaothuy.ebookone.fragment.ReplyFragment;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements ReplaceListener, EventBackPress {
 
     public MainActivity() {
         super(R.string.app_name);
@@ -21,18 +26,13 @@ public class MainActivity extends BaseActivity {
         getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 
         setContentView(R.layout.content_frame);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_frame, new ReadFileFragment())
-                .commit();
+
+        replaceFragment(new ReadFileFragment());
 
         getSlidingMenu().setSecondaryMenu(R.layout.menu_frame_two);
         getSlidingMenu().setSecondaryShadowDrawable(R.drawable.shadowright);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.menu_frame_two, new CommentFragment())
-                .commit();
 
+        replaceFragment(new CommentFragment());
 
     }
 
@@ -42,4 +42,40 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onReplace() {
+        replaceFragment(new NewPostFragment());
+    }
+
+    @Override
+    public void reply(String post_key) {
+        Fragment fragment = new ReplyFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(ReplyFragment.EXTRA_POST_KEY, post_key);
+        fragment.setArguments(bundle);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_left,
+                        R.anim.enter_from_right, R.anim.exit_from_right,
+                        R.anim.exit_from_left)
+                .replace(R.id.menu_frame_two, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_left,
+                        R.anim.enter_from_right, R.anim.exit_from_right,
+                        R.anim.exit_from_left)
+                .replace(R.id.menu_frame_two, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onBackPressFragment() {
+        onBackPressed();
+    }
 }

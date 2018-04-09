@@ -2,38 +2,39 @@ package com.giaothuy.ebookone.fragment;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.giaothuy.ebookone.R;
 import com.giaothuy.ebookone.activity.BaseFragment;
-import com.giaothuy.ebookone.adapter.CommentAdapter;
 import com.giaothuy.ebookone.api.ApiClient;
 import com.giaothuy.ebookone.api.ApiInterface;
+import com.giaothuy.ebookone.callback.ReplaceListener;
 import com.giaothuy.ebookone.model.Comment;
+import com.giaothuy.ebookone.model.Post;
 import com.giaothuy.ebookone.model.ServerResponse;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
+import com.giaothuy.ebookone.model.User;
+import com.giaothuy.ebookone.viewholder.MyDividerItemDecoration;
+import com.giaothuy.ebookone.viewholder.PostViewHolder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,12 +56,9 @@ public class CommentFragment extends BaseFragment {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    @BindView(R.id.edtComment)
-    EditText edtComment;
-    @BindView(R.id.ivAvatar)
-    ImageView ivAvatar;
-    @BindView(R.id.ivSend)
-    ImageView ivSend;
+
+    @BindView(R.id.fab_new_post)
+    FloatingActionButton fabNewPost;
 
     private Unbinder unbinder;
     //    private GoogleSignInClient mGoogleSignInClient;
@@ -68,8 +66,11 @@ public class CommentFragment extends BaseFragment {
 
     private FirebaseAuth mAuth;
     private String TAG = CommentFragment.class.getSimpleName();
-    private CommentAdapter adapter;
     private List<Comment> list = new ArrayList<>();
+    private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
+    private DatabaseReference mDatabase;
+    private ReplaceListener listener;
+    private LinearLayoutManager mManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,17 +85,13 @@ public class CommentFragment extends BaseFragment {
                 new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build());
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
-        ivSend.setOnClickListener(new View.OnClickListener() {
+        fabNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mAuth.getCurrentUser() != null) {
-                    if (edtComment.getText().toString().trim().isEmpty()) {
-                        Toast.makeText(getActivity(), "Bạn chưa nhập nội dung bình luận", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Post Commment", Toast.LENGTH_SHORT).show();
-                    }
+                    listener.onReplace();
                 } else {
                     startActivityForResult(
                             AuthUI.getInstance()
@@ -103,19 +100,106 @@ public class CommentFragment extends BaseFragment {
                                     .build(),
                             RC_SIGN_IN);
                 }
+
             }
         });
-
-        adapter = new CommentAdapter(getActivity(), list);
 
         return view;
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+        Query postsQuery = mDatabase.child("posts").limitToFirst(100);
+
+        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>()
+                .setQuery(postsQuery, Post.class)
+                .build();
+
+        mAdapter = new FirebaseRecyclerAdapter<Post, PostViewHolder>(options) {
+
+            @Override
+            public PostViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+                LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+                return new PostViewHolder(inflater.inflate(R.layout.item_comment, viewGroup, false));
+            }
+
+            @Override
+            protected void onBindViewHolder(PostViewHolder viewHolder, int position, final Post model) {
+                final DatabaseReference postRef = getRef(position);
+
+                // Set click listener for the whole post view
+                final String postKey = postRef.getKey();
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.reply(postKey);
+                    }
+                });
+
+                // Bind Post to ViewHolder, setting OnClickListener for the star button
+                viewHolder.bindToPost(model, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View starView) {
+                        // Need to write to both places the post is stored
+                        DatabaseReference globalPostRef = mDatabase.child("posts").child(postRef.getKey());
+                        DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
+
+                    }
+                });
+            }
+
+        };
+
+        mManager = new LinearLayoutManager(getActivity());
+        mManager.setReverseLayout(true);
+        mManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(mManager);
+        recyclerView.addItemDecoration(new MyDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 0));
+        recyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            listener = (ReplaceListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(e.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        updateUI(firebaseUser);
+
+        if (mAuth.getCurrentUser() != null) {
+            onAuthSuccess(mAuth.getCurrentUser());
+        }
+
+        if (mAdapter != null) {
+            mAdapter.startListening();
+        }
+    }
+
+    private void onAuthSuccess(FirebaseUser user) {
+        String username = usernameFromEmail(user.getEmail());
+        String urlAvatar = "";
+        if (user.getPhotoUrl() != null) {
+            urlAvatar = user.getPhotoUrl().toString();
+        }
+        writeNewUser(user.getUid(), username, user.getEmail(), urlAvatar);
+
+    }
+
+    private void writeNewUser(String userId, String name, String email, String avatar) {
+        User user = new User(name, email, avatar);
+
+        mDatabase.child("users").child(userId).setValue(user);
     }
 
     @Override
@@ -127,52 +211,14 @@ public class CommentFragment extends BaseFragment {
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                updateUI(user);
 
                 // ...
             } else {
-                updateUI(null);
+
             }
         }
     }
 
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        showProgressDialog();
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            updateUI(null);
-                        }
-                        hideProgressDialog();
-                    }
-                });
-    }
-
-    private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-        if (user != null) {
-            ivAvatar.setVisibility(View.VISIBLE);
-            if (user.getPhotoUrl() != null) {
-                Glide.with(getActivity()).load(user.getPhotoUrl().toString()).into(ivAvatar);
-            } else {
-                ivAvatar.setImageResource(R.mipmap.ic_user);
-            }
-            addUser(user.getUid(), user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString());
-            session.createLoginSession(user.getDisplayName(), user.getEmail(), user.getUid(), user.getPhotoUrl().toString());
-        } else {
-            ivAvatar.setVisibility(View.GONE);
-        }
-    }
 
     private void addUser(String uid, String name, String email, String avatar) {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -194,24 +240,12 @@ public class CommentFragment extends BaseFragment {
         });
     }
 
-    private void addComment(String uid, String message) {
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<ServerResponse> call = apiService.addComment(uid, message);
-        call.enqueue(new Callback<ServerResponse>() {
-            @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                if (response.body().isStatus()) {
-
-                } else {
-                    Toast.makeText(getActivity(), "Comment that bai", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
-
-            }
-        });
+    private String usernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.split("@")[0];
+        } else {
+            return email;
+        }
     }
 
     @Override
@@ -229,5 +263,14 @@ public class CommentFragment extends BaseFragment {
     protected void agree() {
         super.agree();
 //        signIn();
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAdapter != null) {
+            mAdapter.stopListening();
+        }
     }
 }

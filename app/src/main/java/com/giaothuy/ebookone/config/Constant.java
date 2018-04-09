@@ -44,4 +44,8 @@ public class Constant {
         public static final int CHUONG_19 = 304;
         public static final int CHUONG_20 = 314;
     }
+
+    public static class TIME_STAMP {
+        public static final String DATE_TIME_1 = "hh:mm:ss";
+    }
 }

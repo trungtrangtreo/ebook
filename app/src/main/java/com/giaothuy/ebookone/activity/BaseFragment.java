@@ -84,4 +84,5 @@ public class BaseFragment extends Fragment {
     protected void cancle() {
 
     }
+
 }

@@ -1,45 +1,34 @@
 package com.giaothuy.ebookone.model;
 
-/**
- * Created by 1 on 3/7/2018.
- */
+import com.google.firebase.database.IgnoreExtraProperties;
 
+// [START comment_class]
+@IgnoreExtraProperties
 public class Comment {
 
-    private String uid;
-    private String avatar;
-    private String email;
-    private String message;
+    public String uid;
+    public String author;
+    public String text;
+    public String avatar;
+    public long timeStamp;
 
-    public String getUid() {
-        return uid;
+    public Comment() {
+        // Default constructor required for calls to DataSnapshot.getValue(Comment.class)
     }
 
-    public void setUid(String uid) {
+    public Comment(String uid, String author, String text, String avatar, long timeStamp) {
         this.uid = uid;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
+        this.author = author;
+        this.text = text;
         this.avatar = avatar;
+        this.timeStamp = timeStamp;
     }
 
-    public String getEmail() {
-        return email;
+    public Comment(String uid, String author, String text) {
+        this.uid = uid;
+        this.author = author;
+        this.text = text;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }
+// [END comment_class]

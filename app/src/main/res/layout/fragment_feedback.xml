@@ -1,93 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.google.firebase.quickstart.database.PostDetailActivity">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/rlTop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:padding="@dimen/_10sdp">
-
-        <TextView
-            android:id="@+id/tvBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_arrow_back_white"
-            android:drawablePadding="@dimen/_5sdp"
-            android:gravity="center"
-            android:text="Phản hồi bình luận"
-            android:textColor="@color/white" />
-    </RelativeLayout>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivAvatar"
-        android:layout_width="@dimen/_35sdp"
-        android:layout_height="@dimen/_35sdp"
-        android:layout_below="@+id/rlTop"
-        android:layout_margin="@dimen/_5sdp"
-        android:src="@mipmap/ic_user" />
-
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rlTop"
-        android:layout_margin="@dimen/_5sdp"
-        android:layout_marginLeft="@dimen/_5sdp"
-        android:layout_toRightOf="@+id/ivAvatar"
-        android:text="Ok bai viet kha hay"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvComment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvName"
-        android:layout_margin="@dimen/_5sdp"
-        android:layout_marginLeft="@dimen/_5sdp"
-        android:layout_toRightOf="@+id/ivAvatar"
-        android:text="Ok bai viet kha hay" />
-
-
-    <RelativeLayout
-        android:id="@+id/comment_form"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvComment"
-        android:layout_margin="@dimen/_5sdp"
-        android:layout_marginTop="@dimen/_5sdp">
-
-        <EditText
-            android:id="@+id/field_comment_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_3sdp"
-            android:layout_toLeftOf="@+id/button_post_comment"
-            android:background="@drawable/bg_editext"
-            android:hint="Write a comment..."
-            android:padding="@dimen/_10sdp"
-            android:textSize="@dimen/_11sdp" />
-
-        <Button
-            android:id="@+id/button_post_comment"
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_alignParentRight="true"
-            android:layout_margin="@dimen/_5sdp"
-            android:layout_weight="0.1"
-            android:background="@drawable/vt_send" />
-
-    </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_comments"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/comment_form"
-        tools:listitem="@layout/item_comment" />
+        tools:context="com.google.firebase.quickstart.database.PostDetailActivity">
 
-</RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rlTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tvBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_arrow_back_white"
+                android:drawablePadding="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="Phản hồi bình luận"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_below="@+id/rlTop"
+            android:layout_margin="@dimen/_5sdp"
+            android:src="@mipmap/ic_user" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlTop"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_toRightOf="@+id/ivAvatar"
+            android:text="Ok bai viet kha hay"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvName"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_toRightOf="@+id/ivAvatar"
+            android:text="Ok bai viet kha hay" />
+
+
+        <RelativeLayout
+            android:id="@+id/comment_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvComment"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp">
+
+            <EditText
+                android:id="@+id/field_comment_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:layout_toLeftOf="@+id/button_post_comment"
+                android:background="@drawable/bg_editext"
+                android:hint="Write a comment..."
+                android:padding="@dimen/_10sdp"
+                android:textSize="@dimen/_11sdp" />
+
+            <Button
+                android:id="@+id/button_post_comment"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_weight="0.1"
+                android:background="@drawable/vt_send" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_comments"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/comment_form"
+            tools:listitem="@layout/item_comment" />
+
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

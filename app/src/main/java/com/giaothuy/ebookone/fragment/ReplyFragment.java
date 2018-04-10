@@ -193,6 +193,7 @@ public class ReplyFragment extends BaseFragment {
         mAdapter = new CommentAdapter(getActivity(), mCommentsReference);
         recyclerComment.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerComment.addItemDecoration(new MyDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 0));
+        recyclerComment.setNestedScrollingEnabled(false);
         recyclerComment.setAdapter(mAdapter);
     }
 

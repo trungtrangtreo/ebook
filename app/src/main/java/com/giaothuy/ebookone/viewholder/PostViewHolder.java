@@ -22,6 +22,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public ImageView ivAvatar;
     public TextView tvTilte;
     public TextView tvLike;
+    public TextView tvReply;
     public ImageView ivLike;
 
     public PostViewHolder(View itemView) {
@@ -33,6 +34,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         ivAvatar = itemView.findViewById(R.id.ivAvatar);
         tvTilte = itemView.findViewById(R.id.tvTilte);
         tvLike = itemView.findViewById(R.id.tvLike);
+        tvReply = itemView.findViewById(R.id.tvReply);
         ivLike = itemView.findViewById(R.id.ivLike);
     }
 

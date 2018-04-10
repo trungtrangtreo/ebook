@@ -72,6 +72,18 @@
             android:drawablePadding="@dimen/_5sdp"
             android:gravity="center"
             android:text="0" />
+
+        <TextView
+            android:id="@+id/tvReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_toRightOf="@+id/tvLike"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="Trả lời" />
     </RelativeLayout>
 
     <TextView

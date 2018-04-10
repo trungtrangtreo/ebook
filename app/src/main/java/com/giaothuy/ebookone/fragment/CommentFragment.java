@@ -8,8 +8,10 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +24,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -30,12 +31,9 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.giaothuy.ebookone.R;
 import com.giaothuy.ebookone.activity.BaseFragment;
-import com.giaothuy.ebookone.api.ApiClient;
-import com.giaothuy.ebookone.api.ApiInterface;
 import com.giaothuy.ebookone.callback.ReplaceListener;
 import com.giaothuy.ebookone.model.Comment;
 import com.giaothuy.ebookone.model.Post;
-import com.giaothuy.ebookone.model.ServerResponse;
 import com.giaothuy.ebookone.model.User;
 import com.giaothuy.ebookone.viewholder.MyDividerItemDecoration;
 import com.giaothuy.ebookone.viewholder.PostViewHolder;
@@ -56,9 +54,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -118,7 +113,6 @@ public class CommentFragment extends BaseFragment {
                                     .build(),
                             RC_SIGN_IN);
                 }
-
             }
         });
 
@@ -146,13 +140,14 @@ public class CommentFragment extends BaseFragment {
                 return new PostViewHolder(inflater.inflate(R.layout.item_comment, viewGroup, false));
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             protected void onBindViewHolder(final PostViewHolder viewHolder, int position, final Post model) {
                 final DatabaseReference postRef = getRef(position);
 
                 // Set click listener for the whole post view
                 final String postKey = postRef.getKey();
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                viewHolder.tvReply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         listener.reply(postKey);

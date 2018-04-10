@@ -1,6 +1,10 @@
 package com.giaothuy.ebookone.fragment;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +14,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -32,9 +41,13 @@ import com.giaothuy.ebookone.viewholder.MyDividerItemDecoration;
 import com.giaothuy.ebookone.viewholder.PostViewHolder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +73,9 @@ public class CommentFragment extends BaseFragment {
     @BindView(R.id.fab_new_post)
     FloatingActionButton fabNewPost;
 
+    @BindView(R.id.tvNotComment)
+    TextView tvNotComment;
+
     private Unbinder unbinder;
     //    private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 123;
@@ -71,6 +87,8 @@ public class CommentFragment extends BaseFragment {
     private DatabaseReference mDatabase;
     private ReplaceListener listener;
     private LinearLayoutManager mManager;
+    private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
+    private static final OvershootInterpolator OVERSHOOT_INTERPOLATOR = new OvershootInterpolator(3);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,14 +128,16 @@ public class CommentFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initComment();
 
+    }
 
-        Query postsQuery = mDatabase.child("posts").limitToFirst(100);
+    private void initComment() {
+        Query postsQuery = mDatabase.child("posts").limitToFirst(10000);
 
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>()
                 .setQuery(postsQuery, Post.class)
                 .build();
-
         mAdapter = new FirebaseRecyclerAdapter<Post, PostViewHolder>(options) {
 
             @Override
@@ -127,7 +147,7 @@ public class CommentFragment extends BaseFragment {
             }
 
             @Override
-            protected void onBindViewHolder(PostViewHolder viewHolder, int position, final Post model) {
+            protected void onBindViewHolder(final PostViewHolder viewHolder, int position, final Post model) {
                 final DatabaseReference postRef = getRef(position);
 
                 // Set click listener for the whole post view
@@ -139,13 +159,24 @@ public class CommentFragment extends BaseFragment {
                     }
                 });
 
+                if (model.stars.containsKey(getUid())) {
+                    viewHolder.ivLike.setImageResource(R.drawable.ic_favorite_pink);
+                } else {
+                    viewHolder.ivLike.setImageResource(R.drawable.vt_favorite);
+                }
+
                 // Bind Post to ViewHolder, setting OnClickListener for the star button
                 viewHolder.bindToPost(model, new View.OnClickListener() {
                     @Override
                     public void onClick(View starView) {
-                        // Need to write to both places the post is stored
+                        animateHeartButton(viewHolder.ivLike);
+
                         DatabaseReference globalPostRef = mDatabase.child("posts").child(postRef.getKey());
                         DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
+
+                        // Run two transactions
+                        onStarClicked(globalPostRef);
+                        onStarClicked(userPostRef);
 
                     }
                 });
@@ -159,6 +190,39 @@ public class CommentFragment extends BaseFragment {
         recyclerView.setLayoutManager(mManager);
         recyclerView.addItemDecoration(new MyDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 0));
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private void onStarClicked(DatabaseReference postRef) {
+        postRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Post p = mutableData.getValue(Post.class);
+                if (p == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                if (p.stars.containsKey(getUid())) {
+                    // Unstar the post and remove self from stars
+                    p.starCount = p.starCount - 1;
+                    p.stars.remove(getUid());
+                } else {
+                    // Star the post and add self to stars
+                    p.starCount = p.starCount + 1;
+                    p.stars.put(getUid(), true);
+                }
+
+                // Set value and report transaction success
+                mutableData.setValue(p);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
     }
 
     @Override
@@ -179,11 +243,18 @@ public class CommentFragment extends BaseFragment {
 
         if (mAuth.getCurrentUser() != null) {
             onAuthSuccess(mAuth.getCurrentUser());
+            fabNewPost.setImageResource(R.drawable.vt_mode_edit);
+        } else {
+            fabNewPost.setImageResource(R.drawable.vt_login);
+            tvNotComment.setVisibility(View.VISIBLE);
         }
-
         if (mAdapter != null) {
             mAdapter.startListening();
         }
+    }
+
+    public String getUid() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     private void onAuthSuccess(FirebaseUser user) {
@@ -210,35 +281,18 @@ public class CommentFragment extends BaseFragment {
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                // ...
+                mAuth = FirebaseAuth.getInstance();
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                initComment();
+                mAdapter.startListening();
+                fabNewPost.setImageResource(R.drawable.vt_mode_edit);
+                tvNotComment.setVisibility(View.GONE);
             } else {
 
             }
         }
     }
 
-
-    private void addUser(String uid, String name, String email, String avatar) {
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<ServerResponse> call = apiService.createUser(uid, name, email, avatar);
-        call.enqueue(new Callback<ServerResponse>() {
-            @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                if (response.body().isStatus()) {
-                    Toast.makeText(getActivity(), "Login thanh cong", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "Login that bai", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
-
-            }
-        });
-    }
 
     private String usernameFromEmail(String email) {
         if (email.contains("@")) {
@@ -270,7 +324,37 @@ public class CommentFragment extends BaseFragment {
     public void onStop() {
         super.onStop();
         if (mAdapter != null) {
-            mAdapter.stopListening();
+//            mAdapter.stopListening();
         }
+    }
+
+    private void animateHeartButton(final ImageView ivLike) {
+        AnimatorSet animatorSet = new AnimatorSet();
+
+        ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(ivLike, "rotation", 0f, 360f);
+        rotationAnim.setDuration(300);
+        rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
+
+        ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(ivLike, "scaleX", 0.2f, 1f);
+        bounceAnimX.setDuration(300);
+        bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
+
+        ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(ivLike, "scaleY", 0.2f, 1f);
+        bounceAnimY.setDuration(300);
+        bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
+        bounceAnimY.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                ivLike.setImageResource(R.drawable.ic_favorite_pink);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+            }
+        });
+
+        animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim);
+        animatorSet.start();
+
     }
 }

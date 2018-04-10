@@ -21,6 +21,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public TextView tvTime;
     public ImageView ivAvatar;
     public TextView tvTilte;
+    public TextView tvLike;
+    public ImageView ivLike;
 
     public PostViewHolder(View itemView) {
         super(itemView);
@@ -30,14 +32,17 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         tvTime = itemView.findViewById(R.id.tvTime);
         ivAvatar = itemView.findViewById(R.id.ivAvatar);
         tvTilte = itemView.findViewById(R.id.tvTilte);
+        tvLike = itemView.findViewById(R.id.tvLike);
+        ivLike = itemView.findViewById(R.id.ivLike);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void bindToPost(Post post, View.OnClickListener starClickListener) {
-        tvTilte.setText(post.body);
-        tvComment.setText(post.title);
+        tvComment.setText(post.body);
+        tvName.setText(post.author);
         Glide.with(ivAvatar.getContext()).load(post.avatar).apply(new RequestOptions().error(R.mipmap.ic_user)).into(ivAvatar);
-        tvTime.setText(TimeAgo.using(post.timeStamp,ValidateUtils.getTimeAgo()));
-
+        tvTime.setText(TimeAgo.using(post.timeStamp, ValidateUtils.getTimeAgo()));
+        tvLike.setText(String.valueOf(post.starCount));
+        ivLike.setOnClickListener(starClickListener);
     }
 }

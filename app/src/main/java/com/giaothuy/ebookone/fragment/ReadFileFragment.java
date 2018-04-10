@@ -23,15 +23,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.giaothuy.ebookone.R;
+import com.giaothuy.ebookone.activity.MainActivity;
 import com.giaothuy.ebookone.callback.ToolgeListener;
 import com.giaothuy.ebookone.config.Constant;
 import com.giaothuy.ebookone.database.DatabaseHandler;
 import com.giaothuy.ebookone.service.AlarmReceiver;
-import com.giaothuy.ebookone.service.DownloadTask;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
+import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.github.barteksc.pdfviewer.util.FitPolicy;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +59,8 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
     @BindView(R.id.ivSetting)
     ImageView ivSetting;
 
+    public static final String KAN_FILE = "kan.pdf";
+
     private Unbinder unbinder;
     private ToolgeListener listener;
     private DatabaseHandler databaseHandler;
@@ -63,6 +69,7 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     private String DOWNLOAD_SERVICE = "download_service";
+    private MainActivity mActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,9 +87,7 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
             pageView = databaseHandler.getPage(1);
         }
 
-
-        new DownloadTask(getActivity(), Constant.BASE_FILE_DOWNLOAD, pdfView);
-
+        openFile();
 
         ivDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +113,10 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
                                 showSeebar();
                                 break;
                             case R.id.contact:
-                                pdfView.setMidZoom(5);
+                                mActivity.getSlidingMenu().showSecondaryMenu();
+                                break;
+                            case R.id.logout:
+                                FirebaseAuth.getInstance().signOut();
                                 break;
                         }
                         return true;
@@ -117,16 +125,39 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
                 popup.show();
             }
         });
-
         return view;
     }
 
+    private void openFile() {
+        pdfView.fromAsset(KAN_FILE)
+                .defaultPage(pageView)
+                .enableAnnotationRendering(true)
+                .enableSwipe(true)
+                .enableDoubletap(false)
+                .scrollHandle(new DefaultScrollHandle(getActivity()))
+                .spacing(10) // in dp
+                .onPageChange(new OnPageChangeListener() {
+                    @Override
+                    public void onPageChanged(int page, int pageCount) {
+
+                    }
+                })
+                .onPageScroll(new OnPageScrollListener() {
+                    @Override
+                    public void onPageScrolled(int page, float positionOffset) {
+
+                    }
+                })
+                .pageFitPolicy(FitPolicy.BOTH)
+                .load();
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
             listener = (ToolgeListener) context;
+            mActivity = (MainActivity) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + "must implement OnHeadlineSelectedListener");

@@ -28,6 +28,7 @@ import com.giaothuy.ebookone.model.Post;
 import com.giaothuy.ebookone.model.User;
 import com.giaothuy.ebookone.utils.ValidateUtils;
 import com.giaothuy.ebookone.viewholder.CommentViewHolder;
+import com.giaothuy.ebookone.viewholder.MyDividerItemDecoration;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -191,6 +192,7 @@ public class ReplyFragment extends BaseFragment {
         // Listen for comments
         mAdapter = new CommentAdapter(getActivity(), mCommentsReference);
         recyclerComment.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerComment.addItemDecoration(new MyDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 0));
         recyclerComment.setAdapter(mAdapter);
     }
 
@@ -325,6 +327,7 @@ public class ReplyFragment extends BaseFragment {
             Comment comment = mComments.get(position);
             holder.authorView.setText(comment.author);
             holder.bodyView.setText(comment.text);
+            holder.rlLike.setVisibility(View.GONE);
             Glide.with(mContext).load(comment.avatar).into(holder.ivAvatar);
             holder.tvTime.setText(TimeAgo.using(comment.timeStamp, ValidateUtils.getTimeAgo()));
         }

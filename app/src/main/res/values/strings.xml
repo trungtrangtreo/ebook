@@ -39,10 +39,11 @@
     </string-array>
     <string name="alarm">Hẹn giờ đọc sách sau :</string>
     <string name="mn_alarm">Hẹn giờ</string>
-    <string name="contact">Liên hệ, góp ý</string>
+    <string name="contact">Bình luận</string>
+    <string name="logout">Log out</string>
 
     <string name="loading">loading</string>
-    <string name="tv_notify">Chưa có bình luận, nhận xét nào</string>
+    <string name="tv_notify">Vui lòng đăng nhập để bình luận.</string>
     <string name="edt_comment">Viết bình luận, đánh giá</string>
     <string name="btn_add_comment">Thêm bình luận</string>
     <string name="downloadStarted">Start download</string>

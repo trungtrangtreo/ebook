@@ -28,12 +28,12 @@ public class MainActivity extends BaseActivity implements ReplaceListener, Event
 
         setContentView(R.layout.content_frame);
 
-        replaceFragment(new ReadFileFragment());
+        replaceFragment(new ReadFileFragment(), R.id.content_frame);
 
         getSlidingMenu().setSecondaryMenu(R.layout.menu_frame_two);
         getSlidingMenu().setSecondaryShadowDrawable(R.drawable.shadowright);
 
-        replaceFragment(new CommentFragment());
+        replaceFragment(new CommentFragment(), R.id.menu_frame_two);
 
     }
 
@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity implements ReplaceListener, Event
 
     @Override
     public void onReplace() {
-        replaceFragment(new NewPostFragment());
+        replaceFragment(new NewPostFragment(), R.id.menu_frame_two);
     }
 
     @Override
@@ -64,13 +64,13 @@ public class MainActivity extends BaseActivity implements ReplaceListener, Event
                 .commit();
     }
 
-    private void replaceFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment, int id) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_left,
                         R.anim.enter_from_right, R.anim.exit_from_right,
                         R.anim.exit_from_left)
-                .replace(R.id.menu_frame_two, fragment)
+                .replace(id, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -82,10 +82,6 @@ public class MainActivity extends BaseActivity implements ReplaceListener, Event
 
     @Override
     public void onBackPressed() {
-
-        if (slidingMenu.isMenuShowing()) {
-            return;
-        }
         super.onBackPressed();
     }
 

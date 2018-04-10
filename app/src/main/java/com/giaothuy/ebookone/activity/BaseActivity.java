@@ -48,6 +48,7 @@ public class BaseActivity extends SlidingFragmentActivity implements ToolgeListe
     @Override
     public void closeDrawer() {
         slidingMenu.toggle();
+
     }
 
     @Override

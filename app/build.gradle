@@ -58,6 +58,5 @@ dependencies {
     compile("com.twitter.sdk.android:twitter-core:3.0.0@aar") { transitive = true }
     compile 'com.github.marlonlom:timeago:3.0.2'
 
-
 }
 apply plugin: 'com.google.gms.google-services'

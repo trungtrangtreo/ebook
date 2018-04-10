@@ -9,4 +9,8 @@
         android:id="@+id/contact"
         android:title="@string/contact" />
 
+    <item
+        android:id="@+id/logout"
+        android:title="@string/logout" />
+
 </menu>

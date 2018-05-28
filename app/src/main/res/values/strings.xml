@@ -51,7 +51,7 @@
     <string name="downloadFailed">Download fail</string>
     <string name="downloadAgain">Download again</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="admod_key">ca-app-pub-8953751559247702/4755424509</string>
+    <string name="admod_key_test">ca-app-pub-3940256099942544/1033173712</string>
 
 </resources>

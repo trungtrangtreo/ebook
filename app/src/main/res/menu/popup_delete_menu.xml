@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res-auto"
+    xmlns:android2="http://schemas.android.com/apk/res/android">
+
+    <item
+        android2:title="Xóa"
+        android2:id="@+id/delete"
+        android:title="Xóa" />
+
+</menu>

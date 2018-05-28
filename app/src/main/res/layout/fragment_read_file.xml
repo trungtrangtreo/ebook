@@ -26,10 +26,9 @@
             android:layout_marginLeft="@dimen/_3sdp"
             android:layout_toLeftOf="@+id/ivSetting"
             android:layout_toRightOf="@+id/ivDrawer"
-            android:ellipsize="end"
-            android:singleLine="true"
+            android:padding="@dimen/_5sdp"
             android:textColor="@color/white"
-            android:textSize="@dimen/_13sdp" />
+            android:textSize="@dimen/_11sdp" />
 
         <ImageView
             android:id="@+id/ivSetting"

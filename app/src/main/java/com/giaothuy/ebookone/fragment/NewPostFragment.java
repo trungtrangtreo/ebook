@@ -102,12 +102,7 @@ public class NewPostFragment extends BaseFragment {
             mBodyField.setError(REQUIRED);
             return;
         }
-
-        // Disable button so there are no multi-posts
         setEditingEnabled(false);
-        Toast.makeText(getActivity(), "Posting...", Toast.LENGTH_SHORT).show();
-
-        // [START single_value_read]
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (userId != null) {
             mDatabase.child("users").child(userId).addListenerForSingleValueEvent(

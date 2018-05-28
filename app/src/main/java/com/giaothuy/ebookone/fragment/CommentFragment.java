@@ -7,6 +7,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,6 +39,8 @@ import com.giaothuy.ebookone.model.Post;
 import com.giaothuy.ebookone.model.User;
 import com.giaothuy.ebookone.viewholder.MyDividerItemDecoration;
 import com.giaothuy.ebookone.viewholder.PostViewHolder;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +50,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,6 +90,8 @@ public class CommentFragment extends BaseFragment {
     private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
     private static final OvershootInterpolator OVERSHOOT_INTERPOLATOR = new OvershootInterpolator(3);
 
+    private InterstitialAd mInterstitialAd;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,9 +107,23 @@ public class CommentFragment extends BaseFragment {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+//      MobileAds.initialize(getActivity(), "ca-app-pub-8953751559247702~4843479443");
+
+        mInterstitialAd = new InterstitialAd(getActivity());
+        mInterstitialAd.setAdUnitId("ca-app-pub-8953751559247702/5110411360");
+
+        AdRequest request = new AdRequest.Builder().build();
+        mInterstitialAd.loadAd(request);
+
+
         fabNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                if (mInterstitialAd.isLoaded()) {
+//                    mInterstitialAd.show();
+//                } else {
+//                    Toast.makeText(getActivity(), "Not load Ad", Toast.LENGTH_SHORT).show();
+//                }
                 if (mAuth.getCurrentUser() != null) {
                     listener.onReplace();
                 } else {
@@ -116,14 +137,29 @@ public class CommentFragment extends BaseFragment {
             }
         });
 
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!mInterstitialAd.isLoaded()) {
+            requestNewInterstitial();
+        }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initComment();
+    }
 
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
     }
 
     private void initComment() {
@@ -175,16 +211,72 @@ public class CommentFragment extends BaseFragment {
 
                     }
                 });
+                viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (model.uid.equals(getUid())) {
+                            showDialog(model, postRef);
+                        }
+                        return false;
+                    }
+                });
             }
-
         };
-
         mManager = new LinearLayoutManager(getActivity());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mManager);
         recyclerView.addItemDecoration(new MyDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL, 0));
         recyclerView.setAdapter(mAdapter);
+    }
+
+
+    private void showDialog(final Post model, final DatabaseReference postRef) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage("Bạn có muốn xóa bình luận này không?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Query postsQuery = mDatabase.child("posts").child(postRef.getKey());
+                        Query postsQueryComment = mDatabase.child("post-comments").child(postRef.getKey());
+
+                        postsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                    appleSnapshot.getRef().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.e(TAG, "onCancelled", databaseError.toException());
+                            }
+                        });
+
+
+                        postsQueryComment.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                    appleSnapshot.getRef().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void onStarClicked(DatabaseReference postRef) {
@@ -273,7 +365,6 @@ public class CommentFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
-
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 mAuth = FirebaseAuth.getInstance();
@@ -282,8 +373,6 @@ public class CommentFragment extends BaseFragment {
                 mAdapter.startListening();
                 fabNewPost.setImageResource(R.drawable.vt_mode_edit);
                 tvNotComment.setVisibility(View.GONE);
-            } else {
-
             }
         }
     }

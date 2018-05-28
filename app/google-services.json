@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "966322860680",
+    "firebase_url": "https://project-4182364925654083972.firebaseio.com",
+    "project_id": "project-4182364925654083972",
+    "storage_bucket": "project-4182364925654083972.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966322860680:android:67d4d2dbb34d9612",
+        "android_client_info": {
+          "package_name": "com.giaothuy.ebookone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966322860680-a3lrmhiccqlth9nopqgmhvaef19ersl0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmBAk7Fe6AC_t26rPBtwy_a-UyH-La-dw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

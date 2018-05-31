@@ -61,21 +61,18 @@ public class AlarmReceiver extends BroadcastReceiver {
     private void showNotify(Context context, Intent intent) {
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
-
         //Create the content intent for the notification, which launches this activity
         Intent contentIntent = new Intent(context, MainActivity.class);
         PendingIntent contentPendingIntent = PendingIntent.getActivity
                 (context, NOTIFICATION_ID, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         //Build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_icon_app)
+                .setSmallIcon(R.drawable.ic_notifi_alarm)
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(intent.getStringExtra(Constant.TITLE))
                 .setContentIntent(contentPendingIntent)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
-
         //Deliver the notification
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }

@@ -133,7 +133,7 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
                 .defaultPage(pageView)
                 .enableAnnotationRendering(true)
                 .enableSwipe(true)
-                .enableDoubletap(false)
+                .enableDoubletap(true)
                 .scrollHandle(new DefaultScrollHandle(getActivity()))
                 .spacing(10) // in dp
                 .onPageChange(new OnPageChangeListener() {

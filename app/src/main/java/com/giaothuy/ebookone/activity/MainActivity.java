@@ -21,7 +21,6 @@ public class MainActivity extends BaseActivity implements ReplaceListener, Event
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +35,6 @@ public class MainActivity extends BaseActivity implements ReplaceListener, Event
         getSlidingMenu().setSecondaryShadowDrawable(R.drawable.shadowright);
 
         replaceFragment(new CommentFragment(), R.id.menu_frame_two);
-
-
-
-
 
     }
 
@@ -94,7 +89,6 @@ public class MainActivity extends BaseActivity implements ReplaceListener, Event
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
             if (!(slidingMenu.isSecondaryMenuShowing() || slidingMenu.isMenuShowing())) {
                 if (getSupportFragmentManager().getBackStackEntryCount() <= 2) {
                     System.exit(0);

@@ -2,7 +2,7 @@
 
 One Paragraph of project description goes here
 
-![alt tag](https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093453.png?alt=media&token=26f4ec4e-06d8-4c35-9c1b-3f4cca19846c "Description goes here")
+![alt tag](https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093548.png?alt=media&token=2d228db4-4566-4681-9d86-99edc2cc8b55 "Description goes here")
 
 
 ## Getting Started

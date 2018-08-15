@@ -2,9 +2,8 @@
 
 One Paragraph of project description goes here
 
-<p align="center">
-  <img width="460" height="300" src="https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093453.png?alt=media&token=a94948b0-0e83-4f6d-863a-2caf69d020d3">
-</p>
+![alt tag](https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093453.png?alt=media&token=26f4ec4e-06d8-4c35-9c1b-3f4cca19846c "Description goes here")
+
 
 ## Getting Started
 

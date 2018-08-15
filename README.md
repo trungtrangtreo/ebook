@@ -2,7 +2,11 @@
 
 One Paragraph of project description goes here
  
- <img align="center" width="500" height="600" src="https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093548.png?alt=media&token=2d228db4-4566-4681-9d86-99edc2cc8b55">
+<p align="center">
+  <img src="https://janishar.github.io/images/mvp-app-pics/mvp-login.png" width="250">
+  <img src="https://janishar.github.io/images/mvp-app-pics/main-view.png" width="250">
+  <img src="https://janishar.github.io/gifs/mvp-app.gif" width="250">
+</p>
 
 ## Getting Started
 

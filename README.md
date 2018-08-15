@@ -4,8 +4,8 @@ One Paragraph of project description goes here
  
 <p align="center">
   <img src="https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093548.png?alt=media&token=2d228db4-4566-4681-9d86-99edc2cc8b55" width="250">
-   <img src="https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093548.png?alt=media&token=2d228db4-4566-4681-9d86-99edc2cc8b55" width="250">
-    <img src="https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093548.png?alt=media&token=2d228db4-4566-4681-9d86-99edc2cc8b55" width="250">
+   <img src="https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093453.png?alt=media&token=a94948b0-0e83-4f6d-863a-2caf69d020d3" width="250">
+    <img src="https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/photo_2018-08-14_09-39-53.jpg?alt=media&token=e233608e-a286-4b70-be41-9bb2f9e1f719" width="250">
 </p>
 
 ## Getting Started

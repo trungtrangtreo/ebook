@@ -3,7 +3,7 @@
 One Paragraph of project description goes here
 
 <p align="center">
-  <img width="460" height="300" src=https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093453.png?alt=media&token=a94948b0-0e83-4f6d-863a-2caf69d020d3">
+  <img width="460" height="300" src="https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093453.png?alt=media&token=a94948b0-0e83-4f6d-863a-2caf69d020d3">
 </p>
 
 ## Getting Started

@@ -1,9 +1,8 @@
 # Ebook Kheo An Noi
 
 One Paragraph of project description goes here
-
-![alt tag](https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093548.png?alt=media&token=2d228db4-4566-4681-9d86-99edc2cc8b55 "Description goes here")
-
+ 
+ <img align="right" width="300" height="300" src="https://firebasestorage.googleapis.com/v0/b/project-4182364925654083972.appspot.com/o/device-2018-08-14-093548.png?alt=media&token=2d228db4-4566-4681-9d86-99edc2cc8b55">
 
 ## Getting Started
 

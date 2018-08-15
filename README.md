@@ -4,14 +4,6 @@ One Paragraph of project description goes here
 
 ![alt tag](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-v-NeT7vjJEWx27KII-tTDlquzMyNCQmYouh9EMD0RhxoNCf0 "Description goes here")
 
-![alt tag](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-v-NeT7vjJEWx27KII-tTDlquzMyNCQmYouh9EMD0RhxoNCf0 "Description goes here")
-
-![alt tag](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-v-NeT7vjJEWx27KII-tTDlquzMyNCQmYouh9EMD0RhxoNCf0 "Description goes here")
-
-![alt tag](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-v-NeT7vjJEWx27KII-tTDlquzMyNCQmYouh9EMD0RhxoNCf0 "Description goes here")
-
-
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.

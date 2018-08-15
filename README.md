@@ -2,7 +2,9 @@
 
 One Paragraph of project description goes here
 
-![alt tag](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-v-NeT7vjJEWx27KII-tTDlquzMyNCQmYouh9EMD0RhxoNCf0 "Description goes here")
+<p align="center">
+  <img width="460" height="300" src="http://www.fillmurray.com/460/300">
+</p>
 
 ## Getting Started
 

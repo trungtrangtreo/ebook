@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import com.giaothuy.ebookone.R;
 import com.giaothuy.ebookone.activity.MainActivity;
 import com.giaothuy.ebookone.callback.ToolgeListener;
@@ -36,7 +35,6 @@ import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.google.firebase.auth.FirebaseAuth;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -125,6 +123,7 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
                 popup.show();
             }
         });
+
         return view;
     }
 
@@ -145,7 +144,7 @@ public class ReadFileFragment extends Fragment implements OnPageChangeListener, 
                 .onPageScroll(new OnPageScrollListener() {
                     @Override
                     public void onPageScrolled(int page, float positionOffset) {
-
+                        setTitle(page);
                     }
                 })
                 .pageFitPolicy(FitPolicy.BOTH)

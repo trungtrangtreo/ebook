@@ -345,18 +345,24 @@ public class CommentFragment extends BaseFragment {
     }
 
     private void onAuthSuccess(FirebaseUser user) {
-        String username = usernameFromEmail(user.getEmail());
+
+        String username = "";
+        if (user.getEmail() != null) {
+            username = usernameFromEmail(user.getEmail());
+        } else {
+            String phone = user.getPhoneNumber().substring(3);
+            username = usernameFromEmail("0" + phone.substring(0, 7) + "xxxxx");
+        }
+
         String urlAvatar = "";
         if (user.getPhotoUrl() != null) {
             urlAvatar = user.getPhotoUrl().toString();
         }
         writeNewUser(user.getUid(), username, user.getEmail(), urlAvatar);
-
     }
 
     private void writeNewUser(String userId, String name, String email, String avatar) {
         User user = new User(name, email, avatar);
-
         mDatabase.child("users").child(userId).setValue(user);
     }
 
